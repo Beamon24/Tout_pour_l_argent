@@ -1,18 +1,17 @@
 body {
-    display: flex;
-    flex-direction: column;
-    font-family: fantasy, sans-serif;
-    margin: 0;
-    padding-top: 140px; /* Ajoute un padding-top pour éviter que le contenu ne soit caché sous le header */
-    line-height: 1.6;
     background-color: darkslateblue;
-    color: gold;
-    font-family: "Bitcount Prop Single", system-ui;
-    margin-left: 5px;
+    background-image: radial-gradient(circle at top, #ff00ff55, transparent 60%),
+                      radial-gradient(circle at bottom, #00ffff55, transparent 60%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color:gold;
 }
+
 body.groupe-page {
     padding-top: 180px; /* Ajuste le padding-top spécifiquement pour la page groupe.html */
 }
+
+
 .image-container {
     display: flex;
     justify-content: center;
@@ -219,3 +218,48 @@ h2::after {
 }
 
 
+html {
+  scroll-behavior: smooth;
+}
+#backToTop {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #222;
+    color: white;
+    padding: 12px 20px;
+    border: 3px solid #fff;
+    font-family: 'Press Start 2P', cursive;
+    box-shadow: 4px 4px 0 #000;
+    cursor: pointer;
+    display: none; /* on le montre seulement quand tu scroll */
+    transition: 0.2s;
+    border-radius: 5px;
+    z-index: 1000;
+}
+
+#backToTop:hover {
+    transform: translateY(-4px);
+    box-shadow: 6px 6px 0 #000;
+}
+
+
+video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+
+.video-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+
+.video-link {
+  position: absolute;
+  inset: 0;         
+  display: block;
+  z-index: 2;
+}
