@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Titre de la page</title>
+  <link rel="stylesheet" href="inscription.css">
+  
+</head>
+<body>
+<div class="form">
+<form action="inscription.php" method="post">
+    <label for="username">Identifiant : </label><br>
+    <input type="text" id="username" name="username" required size="30" placeholder="Mettez ici votre identifiant !"><br>
+    <label for="password">Mot de passe : </label><br>
+    <input type="text" id="password" name="password" required size="30" placeholder="Mettez ici votre mot de passe ! (visible)"><br>
+    <input type="submit" id="submit" value="Envoyer" class="flee">
+</form>
+</div>
+</body>
+<script src="inscription.js"></script>
+
+<audio id="audio" src="audio.mp3" loop></audio>
+
+<button id="btn">Activer le son</button>
+
+<script>
+    const audio = document.getElementById("audio");
+    const btn = document.getElementById("btn");
+
+    btn.onclick = () => {
+        if (audio.paused) {
+            audio.play();
+            btn.textContent = "Désactiver le son";
+        } else {
+            audio.pause();
+            btn.textContent = "Activer le son";
+            console.log("Son désactivée.");
+        }
+    };
+</script>
+
+</html>
