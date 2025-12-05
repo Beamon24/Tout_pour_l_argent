@@ -58,7 +58,7 @@ function validatePassword(value) {
         hasDigit: /\d/.test(value),
         hasWeekday: /(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche)/i.test(value),
         hasRoman: containsRomanSymbol(value),
-        hasAI: /(ChatGPT|Gemini|Claude|Llama|Copilot|LeChat)/i.test(value),
+        hasAI: /(ChatGPT|Gemini|Claude|Llama|Copilot|LeChat|Grok|Bard|Bing)/i.test(value),
         divisibleBy5: /\d/.test(value) && [...value.matchAll(/\d+/g)].some(n => Number(n[0]) % 5 === 0),
         emojiEuro: value.includes("💶"),
         product2025: checkProduct2025(value)
@@ -108,7 +108,7 @@ function displayRules(rules) {
         { key: "hasAI",           text: "Contient le nom d'une IA connue" },
         { key: "divisibleBy5",    text: "Contient un chiffre divisible par 5" },
         { key: "emojiEuro",       text: "Contient l'émoji 💶" },
-        { key: "product2025",     text: "Produit de chaque chiffre = 2025" },
+        { key: "product2025",     text: "Le produit de tous les chiffres doit être égal à 2025" },
     ];
 
 

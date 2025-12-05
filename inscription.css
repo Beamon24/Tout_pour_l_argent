@@ -3,6 +3,10 @@ body{
     font-family: "Bitcount Prop Single", system-ui;
     color: gold;
     font-size: 120%;
+    background-image: radial-gradient(circle at top, #ff00ff55, transparent 60%),
+    radial-gradient(circle at bottom, #00ffff55, transparent 60%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 .form{
@@ -78,4 +82,25 @@ body{
 	justify-content: center;
 	align-items: center;
     box-shadow: 5px 5px 15px gray;
+}
+
+#copy{
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    color: gold;
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-decoration: none;
+    top: 93%;
+}
+
+#copy2{
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    color: gold;
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-decoration: none;
 }
