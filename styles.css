@@ -263,3 +263,9 @@ video {
   display: block;
   z-index: 2;
 }
+
+
+.inscription
+{
+    text-align: right;
+}
