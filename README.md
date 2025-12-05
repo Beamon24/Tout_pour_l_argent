@@ -1,13 +1,15 @@
-# Inscription 
-La page d'inscription correspond aux défis du thème **[L'ergonomie](https://www.nuitdelinfo.com/inscription/defis/444)**.  
-La page permet une inscription (ou pas…) favorisant la pénibilité et la frustration.
+# 🎧Visualiseur Audio Rétro
 
-## Fonctionnalités
-- Gestion de la musique 
-- Remplir un formulaire d'inscription (intéractif)
+Cette page propose un visualiseur audio rétro où l’utilisateur peut importer un fichier audio.  
+Le son est analysé en temps réel pour afficher une visualisation circulaire
 
-## Technologies
-- HTML5 / CSS3 / JavaScript 
+## 🧩Fonctionnalités
+- Upload et lecture audio
+- Visualisation circulaire rétro dynamique
 
-## Contexte et équipe
+## 🛠️Technologies
+- HTML5 / CSS3 / JavaScript
+- Canvas 2D
+
+## 👥Contexte et équipe
 Ce projet a été réalisé dans le cadre de la Nuit de l’Info et appartient à l’équipe **Tout pour l’argent**, composée d’étudiants en Licence 3 Informatique à l’Université d’Angers.
