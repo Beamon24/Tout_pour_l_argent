@@ -22,6 +22,8 @@ const highScoreDisplay = document.getElementById("highScoreDisplay");
 let game;
 
 const RECORD_KEY = 'snakeHighScore'; 
+const HISTORY_KEY = 'snakeScoreHistory';
+const MAX_HISTORY = 5;
 
 let currentHighScore = sessionStorage.getItem(RECORD_KEY);
 if (highScoreDisplay) {
@@ -47,10 +49,10 @@ imagePaths.forEach(path => {
 });
 
 function getRandomFoodPosition() {
-  return {
-    x: Math.floor(Math.random() * (width / boxSize)) * boxSize,
-    y: Math.floor(Math.random() * (height / boxSize)) * boxSize
-  };
+    return {
+        x: Math.floor(Math.random() * (width / boxSize)) * boxSize,
+        y: Math.floor(Math.random() * (height / boxSize)) * boxSize
+    };
 }
 let food = getRandomFoodPosition();
 
@@ -78,13 +80,47 @@ function checkAndSaveHighScore(currentScore) {
     const oldHighScore = sessionStorage.getItem(RECORD_KEY);
     
     if (oldHighScore === null || currentScore > parseInt(oldHighScore)) {
-        // Sauvegarder le nouveau record
         sessionStorage.setItem(RECORD_KEY, currentScore.toString());
         
         if (highScoreDisplay) {
             highScoreDisplay.textContent = currentScore;
         }
     }
+}
+
+function displayScoreHistory() {
+    const scoreList = document.getElementById('score-list');
+    if (!scoreList) return;
+    
+    scoreList.innerHTML = '';
+    
+    const history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+
+    history.forEach((entry, index) => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `N°${index + 1}: ${entry.score}`; 
+        
+        const dateSpan = document.createElement('span');
+        const date = new Date(entry.timestamp);
+        dateSpan.textContent = date.toLocaleDateString();
+        dateSpan.style.fontSize = '10px';
+        dateSpan.style.color = '#ccc';
+        
+        listItem.appendChild(dateSpan);
+        scoreList.appendChild(listItem);
+    });
+}
+
+function addScoreToHistory(newScore) {
+    let history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+
+    history.unshift({ score: newScore, timestamp: Date.now() });
+    history.sort((a, b) => b.score - a.score);
+    history = history.slice(0, MAX_HISTORY);
+
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+    
+    displayScoreHistory();
 }
 
 function gameLoop() {
@@ -99,6 +135,7 @@ function gameLoop() {
         
     if (headX < 0 || headX >= width || headY < 0 || headY >= height) {
         clearInterval(game);
+        addScoreToHistory(score);
         checkAndSaveHighScore(score); 
         losingSound.currentTime = 0;
         losingSound.play();
@@ -114,6 +151,7 @@ function gameLoop() {
     for (let i = 1; i < snake.length; i++) {
     if (headX === snake[i].x && headY === snake[i].y) {
         clearInterval(game);
+        addScoreToHistory(score);
         checkAndSaveHighScore(score); 
         losingSound.currentTime = 0;
         losingSound.play();
@@ -137,6 +175,7 @@ function gameLoop() {
         food = getRandomFoodPosition();
         if (score === 20) {
             clearInterval(game);
+            addScoreToHistory(score);
             victorySound.currentTime = 0;
             victorySound.play();
             let victoryContent = 
@@ -212,5 +251,17 @@ document.addEventListener('keyup', function(event) {
     }
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    
+    const historyTab = document.getElementById('history-tab');
+    if (historyTab) {
+        historyTab.addEventListener('click', function() {
+            const panel = document.getElementById('history-panel');
+            panel.classList.toggle('open');
+        });
+    }
+
+    displayScoreHistory();
+});
 
 game = setInterval(gameLoop, gameSpeed);
