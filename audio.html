@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Visualiseur Audio Circular Retro - Upload</title>
+<link rel="icon" type="image/png" href="images/bee.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitcount+Prop+Single:wght@100..900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  body {
+    background: darkslateblue;
+    margin: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: gold;
+    font-family: "Bitcount Prop Single", system-ui;
+    background-image: radial-gradient(circle at top, #ff00ff55, transparent 60%),
+    radial-gradient(circle at bottom, #00ffff55, transparent 60%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+
+  #centerImage {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    z-index: 10;
+    box-shadow:
+      0 0 20px #0ff,
+      0 0 40px #0ff,
+      0 0 60px #0ff;
+  }
+
+  canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  #controls {
+    position: absolute;
+    bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 20;
+    gap: 10px;
+  }
+
+  #controls input[type="file"] {
+    cursor: pointer;
+  }
+
+  #controls audio {
+    width: 300px;
+  }
+
+  #copy{
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    color: gold;
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+<a href="https://fr.linkedin.com/in/man48" target="_blank" id="copy">Made by Majd Alhalah</a>
+<img id="centerImage" src="bee.png" alt="center">
+
+<canvas id="canvas"></canvas>
+
+<div id="controls">
+  <input type="file" id="audioUpload" accept="audio/*">
+  <audio id="audioPlayer" controls></audio>
+</div>
+
+<script>
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+const audioInput = document.getElementById("audioUpload");
+const audioPlayer = document.getElementById("audioPlayer");
+const centerImage = document.getElementById("centerImage");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let audioCtx;
+let analyser;
+let dataArray;
+let bufferLength;
+let rotation = 0;
+
+const retroColors = ['#0ff', '#f0f', '#ff0', '#0f0', '#f0a'];
+
+function draw() {
+    requestAnimationFrame(draw);
+    analyser.getByteFrequencyData(dataArray);
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    const baseRadius = 150;
+
+    rotation += 0.005;
+
+    for (let i = 0; i < bufferLength; i++) {
+        const value = dataArray[i];
+        const barHeight = value * 0.8;
+
+        const angle = (i / bufferLength) * Math.PI * 2 + rotation;
+
+        const x1 = cx + Math.cos(angle) * baseRadius;
+        const y1 = cy + Math.sin(angle) * baseRadius;
+
+        const x2 = cx + Math.cos(angle) * (baseRadius + barHeight);
+        const y2 = cy + Math.sin(angle) * (baseRadius + barHeight);
+
+        const color = retroColors[i % retroColors.length];
+        ctx.strokeStyle = color;
+
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = color;
+
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+    }
+}
+
+audioInput.addEventListener("change", function() {
+    const file = this.files[0];
+    if (!file) return;
+
+    const fileURL = URL.createObjectURL(file);
+    audioPlayer.src = fileURL;
+    audioPlayer.play();
+
+    if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    const source = audioCtx.createMediaElementSource(audioPlayer);
+
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 512;
+    bufferLength = analyser.frequencyBinCount;
+    dataArray = new Uint8Array(bufferLength);
+
+    source.connect(analyser);
+    analyser.connect(audioCtx.destination);
+
+    if (audioCtx.state === "suspended") audioCtx.resume();
+    draw();
+});
+
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});
+</script>
+
+</body>
+</html>
